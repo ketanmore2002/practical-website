@@ -1,0 +1,604 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <title>Bootstrap demo</title>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-T3c6CoIi6uLrA9TneNEoa7RxnatzjcDSCmG1MXxSR1GAsXEV/Dwwykc2MPK8M2HN" crossorigin="anonymous">
+  </head>
+  <body>
+    <div class="container">
+        <nav class="navbar bg-body-tertiary">
+            <div class="container-fluid">
+              <a class="navbar-brand">NLP Practicals</a>
+                <button onclick="redirectToGoogle()" class="btn btn-danger">Don't click Here !</button>
+            </div>
+          </nav>
+
+      <div class="accordion m-5" id="accordionExample">
+        <div class="accordion-item">
+          <h2 class="accordion-header">
+            <button class="accordion-button collapsed" type="button" data-bs-toggle="collapse" data-bs-target="#collapseOne" aria-expanded="false" aria-controls="collapseOne">
+              NLP Practical #1
+            </button>
+          </h2>
+          <div id="collapseOne" class="accordion-collapse collapse" data-bs-parent="#accordionExample">
+            <button class="btn btn-primary m-3" onclick="copyText('1')">Copy NLP Practical #1</button>
+            <div class="accordion-body">
+                <pre>
+<code id="1">
+import pandas as pd
+import nltk
+nltk.download('book')
+
+from nltk.tokenize import word_tokenize
+text = "Hello everyone. Welcome to NCER."
+tokenize_word= word_tokenize(text)
+print(tokenize_word)
+
+text = """There are multiple ways we can perform tokenization on given text data. We can choose any method based on langauge, library and purpose of modeling."""
+# Split text by whitespace
+tokens = text.split()
+print(tokens)
+
+
+#stemming
+# import these modules
+from nltk.stem import PorterStemmer
+from nltk.tokenize import word_tokenize
+
+ps = PorterStemmer()
+
+# choose some words to be stemmed
+words = ["program", "programs", "programmer", "programming", "programmers"]
+
+for w in words:
+    print(w, " : ", ps.stem(w))
+
+
+#lower casing
+sentence = "Books are on the table."
+sentence = sentence.lower()
+print(sentence)
+
+#upper casing
+sentence = "Books are on the table."
+sentence = sentence.upper()
+print(sentence)
+
+# word stopping
+from nltk.corpus import stopwords
+
+nltk.download('stopwords')
+print(stopwords.words('english'))
+
+
+from nltk.corpus import stopwords
+from nltk.tokenize import word_tokenize
+
+example_sent = """This is a sample sentence,
+                  showing off the stop words filtration."""
+
+stop_words = set(stopwords.words('english'))
+
+word_tokens = word_tokenize(example_sent)
+# converts the words in word_tokens to lower case and then checks whether
+#they are present in stop_words or not
+filtered_sentence = [w for w in word_tokens if not w.lower() in stop_words]
+#with no lower case conversion
+filtered_sentence = []
+
+for w in word_tokens:
+    if w not in stop_words:
+        filtered_sentence.append(w)
+
+print(word_tokens)
+print(filtered_sentence)
+
+
+#lemmitization
+# import these modules
+from nltk.stem import WordNetLemmatizer
+
+lemmatizer = WordNetLemmatizer()
+
+print("rocks :", lemmatizer.lemmatize("rocks"))
+print("corpora :", lemmatizer.lemmatize("corpora"))
+
+# a denotes adjective in "pos"
+print("better :", lemmatizer.lemmatize("better", pos ="a"))
+
+
+#Filtering
+
+text = "This is an example text for  filtering. This is done using NLTK's stopwords."
+words = nltk.word_tokenize(text)
+
+print("Unfiltered: ", words)
+stopwords = nltk.corpus.stopwords.words("english")
+
+cleaned = [word for word in words if word not in stopwords]
+print("Filtered: ", cleaned)
+
+
+
+# https://www.kaggle.com/datasets/jp797498e/twitter-entity-sentiment-analysis?select=twitter_training.csv
+# download dataset from above link
+
+col_names = ['ID', 'Entity', 'Sentiment', 'Content']
+df = pd.read_csv('/Users/ketanmore/Desktop/practical website/twitter_training.csv' ,names=col_names, )
+df = df.dropna()
+df.head()
+
+
+# Performing word tokenize on first 10 rows
+from nltk.tokenize import word_tokenize
+columns = df["Content"]
+
+for i in range(0,10):
+  print(word_tokenize(columns[i]))
+
+
+# Function to remove stopwords from a single text
+def remove_stopwords(text):
+    # stop_words = set(stopwords.words('english'))
+    word_tokens = word_tokenize(text)
+    filtered_text = [word for word in word_tokens if word.lower() not in stop_words]
+    return ' '.join(filtered_text)
+
+
+# Performing word stopwords on first 10 rows
+for i in range(0,10):
+print(remove_stopwords(df["Content"][i]))
+
+
+
+# Function to perform stemming 
+def perform_stemming(text):
+    # Tokenize the text into words
+    words = word_tokenize(text)
+    
+    # Initialize the Porter Stemmer
+    porter_stemmer = PorterStemmer()
+    
+    # Perform stemming on each word
+    stemmed_words = [porter_stemmer.stem(word) for word in words]
+    
+    # Join the stemmed words back into a sentence
+    stemmed_text = ' '.join(stemmed_words)
+    
+    return stemmed_text
+
+
+for i in range(0,10):
+  print(perform_stemming(df["Content"][i]))
+
+</code>
+                </pre>
+            </div>
+          </div>
+        </div>
+        <div class="accordion-item">
+          <h2 class="accordion-header">
+            <button class="accordion-button collapsed" type="button" data-bs-toggle="collapse" data-bs-target="#collapseTwo" aria-expanded="false" aria-controls="collapseTwo">
+              NLP Practical #2
+            </button>
+          </h2>
+          <div id="collapseTwo" class="accordion-collapse collapse" data-bs-parent="#accordionExample">
+            <button class="btn btn-primary m-3" onclick="copyText('2')">Copy NLP Practical #2</button>
+            <div class="accordion-body">
+                <pre>
+<code id="2">
+!pip install spacy
+
+# Load the SpaCy language model
+nlp = spacy.load("en_core_web_sm")
+
+# Function to perform morphological analysis on a sentence
+def analyze_sentence(sentence):
+    doc = nlp(sentence)
+    inflations = []
+    declensions = []
+
+    for token in doc:
+        # Analyze inflation (prefixes and suffixes)
+        inflation = (token.text, f"{token.prefix_}-{token.suffix_}")
+        inflations.append(inflation)
+
+        # Analyze declensions (parts of speech)
+        declension = (token.text, token.pos_)
+        declensions.append(declension)
+
+    return inflations, declensions
+
+# get input from user for various sentences
+interrogative_sentence = "What is the weather like today?" # or interrogative_sentence = input("Enter an interrogative Sentence.")
+declarative_sentence = "The weather is sunny." # or declarative_sentence = input("Enter an declarative Sentence.")
+complex_sentence = "I went to the store, but they were closed, so I had to go to another store." # or complex_sentence = input("Enter an complex sentence using conjunction.")
+
+
+# Process the sentences with spaCy
+interrogative_doc = nlp(interrogative_sentence)
+declarative_doc = nlp(declarative_sentence)
+complex_doc = nlp(complex_sentence)
+
+
+# Print the morphological analysis for interrogative sentence
+for token in interrogative_doc:
+    print(token.text, token.pos_)
+print("\n")
+
+
+# Print the morphological analysis for declarative sentence
+for token in declarative_doc:
+    print(token.text, token.pos_)
+print("\n")
+
+
+# Print the morphological analysis for complex sentence
+for token in complex_doc:
+    print(token.text, token.pos_)
+
+
+# Analyze the sentences
+inflations_interrogative, declensions_interrogative = analyze_sentence(interrogative_sentence)
+inflations_declarative, declensions_declarative = analyze_sentence(declarative_sentence)
+inflations_complex, declensions_complex = analyze_sentence(complex_sentence)
+
+# Create tables
+table1 = [["Word", "Inflation"]]
+table1.extend(inflations_interrogative)
+
+table2 = [["Word", "Declension"]]
+table2.extend(declensions_interrogative)
+
+
+# Print the tables
+print("Table 1: Inflation")
+print(tabulate(table1, headers="firstrow"))
+
+
+print("\nTable 2: Declension")
+print(tabulate(table2, headers="firstrow"))
+</code>
+                </pre>
+            </div>
+          </div>
+        </div>
+        <div class="accordion-item">
+          <h2 class="accordion-header">
+            <button class="accordion-button collapsed" type="button" data-bs-toggle="collapse" data-bs-target="#collapseThree" aria-expanded="false" aria-controls="collapseThree">
+              NLP Practical #3
+            </button>
+          </h2>
+          <div id="collapseThree" class="accordion-collapse collapse" data-bs-parent="#accordionExample">
+            <button class="btn btn-primary m-3" onclick="copyText('3')">Copy NLP Practical #3</button>
+            <div class="accordion-body">
+                <pre>
+<code id="3">
+import nltk
+import matplotlib.pyplot as plt
+nltk.download('punkt')
+
+sentence ="""In the scorching desert heat, I stumbled upon an oasis, an oasis of cool, refreshing water,
+            water that seemed like a mirage in the unforgiving, unforgiving wilderness."""
+
+# Tokenize the sentence into words
+words = nltk.word_tokenize(sentence)
+
+unigrams = list(nltk.ngrams(words, 1))
+bigrams = list(nltk.ngrams(words, 2))
+trigrams = list(nltk.ngrams(words, 3))
+
+unigram_freq = nltk.FreqDist(unigrams)
+bigram_freq = nltk.FreqDist(bigrams)
+trigram_freq = nltk.FreqDist(trigrams)
+unigram_freq
+bigram_freq
+trigram_freq
+
+total_unigrams = len(unigrams)
+total_bigrams = len(bigrams)
+total_trigrams = len(trigrams)
+
+unigram_probabilities = {k: v / total_unigrams for k, v in unigram_freq.items()}
+unigram_probabilities
+
+bigram_probabilities = {k: v / total_bigrams for k, v in bigram_freq.items()}
+bigram_probabilities
+
+trigram_probabilities = {k: v / total_trigrams for k, v in trigram_freq.items()}
+trigram_probabilities
+
+# Plot the probabilities
+def plot_probabilities(probabilities, title):
+    items = list(probabilities.items())
+    items.sort(key=lambda x: x[1], reverse=True)
+    labels, values = zip(*items)
+
+    plt.figure(figsize=(12, 4))
+    plt.bar(range(len(labels)), values, align="center")
+    plt.xticks(range(len(labels)), labels, rotation=45)
+    plt.title(title)
+    plt.xlabel("N-gram")
+    plt.ylabel("Probability")
+    plt.show()
+plot_probabilities(unigram_probabilities, "Unigram Probabilities")
+
+plot_probabilities(bigram_probabilities, "Bigram Probabilities")
+
+plot_probabilities(trigram_probabilities, "Trigram Probabilities")
+
+"""**N-Gram activity on column of Data Set**"""
+
+import pandas as pd
+import nltk
+from nltk.util import ngrams
+from nltk.probability import FreqDist
+import matplotlib.pyplot as plt
+
+# Load the Kaggle dataset into a DataFrame
+# https://www.kaggle.com/datasets/codebreaker619/donald-trump-tweets-dataset
+
+df = pd.read_csv("/content/tweets.csv")
+df.head(5)
+
+text_column = df['text'].head(15)
+
+# Preprocess the text (lowercase, remove punctuation, and tokenize)
+def preprocess_text(text):
+    text = text.lower()
+    text = nltk.word_tokenize(text)
+    return text
+
+# Create bigrams
+bigrams = []
+for text in text_column:
+    tokens = preprocess_text(text)
+    bigrams.extend(list(ngrams(tokens, 2)))
+
+bigram_freq = FreqDist(bigrams)
+bigram_freq
+
+# Calculate the total number of bigrams for normalization
+total_bigrams = len(bigrams)
+
+# Calculate bigram probabilities
+bigram_probabilities = {k: v / total_bigrams for k, v in bigram_freq.items()}
+
+# Visualize bigram probabilities
+def plot_probabilities(probabilities, title):
+    items = list(probabilities.items())
+    items.sort(key=lambda x: x[1], reverse=True)
+    labels, values = zip(*items)
+    plt.figure(figsize=(70, 25))
+    plt.bar(range(len(labels)), values, align="center")
+    plt.xticks(range(len(labels)), labels, rotation=45)
+    plt.title(title)
+    plt.xlabel("Bigram")
+    plt.ylabel("Probability")
+    plt.show()
+
+plot_probabilities(bigram_probabilities, "Bigram Probabilities")
+    
+       
+</code>
+                </pre>
+            </div>
+          </div>
+        </div>
+
+
+        <!-- <div class="accordion-item">
+            <h2 class="accordion-header">
+              <button class="accordion-button collapsed" type="button" data-bs-toggle="collapse" data-bs-target="#collapseFour" aria-expanded="false" aria-controls="collapseFour">
+                Accordion Item #3
+              </button>
+            </h2>
+            <div id="collapseFour" class="accordion-collapse collapse" data-bs-parent="#accordionExample">
+              <div class="accordion-body">
+                <strong>This is the third item's accordion body.</strong> It is hidden by default, until the collapse plugin adds the appropriate classes that we use to style each element. These classes control the overall appearance, as well as the showing and hiding via CSS transitions. You can modify any of this with custom CSS or overriding our default variables. It's also worth noting that just about any HTML can go within the <code>.accordion-body</code>, though the transition does limit overflow.
+              </div>
+            </div>
+          </div> -->
+
+
+
+          <div class="accordion-item">
+            <h2 class="accordion-header">
+              <button class="accordion-button collapsed" type="button" data-bs-toggle="collapse" data-bs-target="#collapseFour" aria-expanded="false" aria-controls="collapseFour">
+                NLP Practical #4
+              </button>
+            </h2>
+            <div id="collapseFour" class="accordion-collapse collapse" data-bs-parent="#accordionExample">
+            <button class="btn btn-primary m-3" onclick="copyText('4')">Copy NLP Practical #4</button>
+              <div class="accordion-body">
+<pre id="4">
+text = "The way to get started is to quit talking and begin doing."
+
+from nltk import word_tokenize
+
+import nltk
+nltk.download('punkt')
+nltk.download('averaged_perceptron_tagger')
+nltk.download('tagsets')
+
+
+tokenizer = word_tokenize(text)
+tokenizer
+
+from nltk import pos_tag
+
+pos_tag(tokenizer)
+
+nltk.help.upenn_tagset("VBG")
+
+"""**Chunking**"""
+
+sentence = "the little yellow dog barked at the cat"
+
+
+grammar = "NP: {&lt;DT&gt;?&lt;JJ&gt;*&lt;NN&gt;}"
+
+cp = nltk.RegexpParser(grammar)
+
+tokens = nltk.word_tokenize (sentence)
+
+tags = nltk.pos_tag(tokens)
+
+chunks = cp.parse(tags)
+
+print(chunks)
+
+# Print the chunks
+for chunk in chunks:
+    print(chunk)
+
+# result.draw()
+
+from collections import Counter
+
+counts = Counter(tag for word,  tag in tags)
+print(counts)
+</pre>                
+              </div>
+            </div>
+          </div>
+
+
+
+
+             <div class="accordion-item">
+            <h2 class="accordion-header">
+              <button class="accordion-button collapsed" type="button" data-bs-toggle="collapse" data-bs-target="#collapseFive" aria-expanded="false" aria-controls="collapseFive">
+                NLP Practical #5
+              </button>
+            </h2>
+            <div id="collapseFive" class="accordion-collapse collapse" data-bs-parent="#accordionExample">
+            <button class="btn btn-primary m-3" onclick="copyText('5')">Copy NLP Practical #5</button>
+              <div class="accordion-body">
+<pre>
+<code id="5">
+import spacy
+
+# Load the English NLP model
+nlp = spacy.load("en_core_web_sm")
+
+# Sample text for NER
+text = "Apple Inc. is a technology company headquartered in Cupertino, California.  It was founded by Steve Jobs, Steve Wozniak, and Ronald Wayne in April 1976.  Apple is known for its products such as the iPhone, MacBook, and Apple Watch.  The company's CEO, Tim Cook, has been leading Apple since August 2011"
+
+
+# Process the text with spaCy
+doc = nlp(text)
+
+# Iterate through entities and print them with their labels
+for ent in doc.ents:
+    print(f"Entity: {ent.text}, Label: {ent.label_}")
+
+
+# Optionally, you can visualize the NER results
+from spacy import displacy
+
+displacy.render(doc, style="ent", jupyter=True)
+
+</code>
+</pre>
+              </div>
+            </div>
+          </div>
+      </div>
+
+
+
+      <nav class="navbar navbar-dark bg-dark">
+        <div class="container-fluid">
+          <span class="navbar-brand mb-0 h1">DVP Practicals</span>
+        </div>
+      </nav>
+
+
+      <table class="table table-striped mt-5 border">
+        <tbody>
+          <tr>
+            <td>DVP #2,3</td>
+            <td><button onclick="downloadFile('tab/2,3.twbx')" type="button" id="dvp-1" class="btn btn-primary">Download</button></td>
+          </tr>
+          <tr>
+            <td>DVP #4</td>
+            <td><button onclick="downloadFile('tab/4.twbx')" type="button" id="dvp-2" class="btn btn-primary">Download</button></td>
+          </tr>
+          <tr>
+            <td>DVP #5</td>
+            <td><button onclick="downloadFile('tab/5.twbx')" type="button" id="dvp-3" class="btn btn-primary">Download</button></td>
+          </tr>
+          <tr>
+            <td>DVP #6</td>
+            <td><button onclick="downloadFile('tab/6.twbx')" type="button" id="dvp-4" class="btn btn-primary">Download</button></td>
+          </tr>
+        </tbody>
+      </table>
+
+    </div>
+    <script>
+        function copyText(elementId) {
+            /* Get the text to be copied from the specified element ID */
+            var textToCopy = document.getElementById(elementId).innerText;
+
+            /* Create a temporary textarea element to hold the text */
+            var textarea = document.createElement("textarea");
+            textarea.value = textToCopy;
+
+            /* Append the textarea to the document */
+            document.body.appendChild(textarea);
+
+            /* Select the text in the textarea */
+            textarea.select();
+            textarea.setSelectionRange(0, 99999); /* For mobile devices */
+
+            /* Copy the selected text to the clipboard */
+            document.execCommand("copy");
+
+            /* Remove the temporary textarea element */
+            document.body.removeChild(textarea);
+
+            /* Provide some visual feedback (optional) */
+            alert("Text has been copied to the clipboard!");
+        }
+    </script>
+
+<script>
+    function downloadFile(fileName) {
+        // Create a dummy link element
+        var link = document.createElement('a');
+
+        // Set the download attribute to specify the filename
+        link.download = fileName;
+
+        // Create a Blob with the file content (you can replace this with your actual file content)
+        var blob = new Blob(['This is the content of ' + fileName], { type: 'text/plain' });
+
+        // Create a URL for the Blob and set it as the href attribute of the link
+        link.href = window.URL.createObjectURL(blob);
+
+        // Append the link to the document
+        document.body.appendChild(link);
+
+        // Programmatically click the link to trigger the download
+        link.click();
+
+        // Remove the link from the document
+        document.body.removeChild(link);
+    }
+</script>
+
+
+<script>
+    function redirectToGoogle() {
+        // Open google.com in a new tab
+        window.open('https://images.hindustantimes.com/rf/image_size_630x354/HT/p2/2020/10/17/Pictures/_30a76066-1046-11eb-8f7e-1b294b66658a.jpg', '_blank');
+    }
+</script>
+
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/js/bootstrap.bundle.min.js" integrity="sha384-C6RzsynM9kWDrMNeT87bh95OGNyZPhcTNXj1NW7RuBCsyN/o0jlpcV8Qyq46cDfL" crossorigin="anonymous"></script>
+  </body>
+</html>

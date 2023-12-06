@@ -526,19 +526,19 @@ displacy.render(doc, style="ent", jupyter=True)
         <tbody>
           <tr>
             <td>DVP #2,3</td>
-            <td><button onclick="downloadFile('tab/2,3.twbx')" type="button" id="dvp-1" class="btn btn-primary">Download</button></td>
+            <td><button onclick="downloadFile('2,3.twbx')" type="button" id="dvp-1" class="btn btn-primary">Download</button></td>
           </tr>
           <tr>
             <td>DVP #4</td>
-            <td><button onclick="downloadFile('tab/4.twbx')" type="button" id="dvp-2" class="btn btn-primary">Download</button></td>
+            <td><button onclick="downloadFile('4.twbx')" type="button" id="dvp-2" class="btn btn-primary">Download</button></td>
           </tr>
           <tr>
             <td>DVP #5</td>
-            <td><button onclick="downloadFile('tab/5.twbx')" type="button" id="dvp-3" class="btn btn-primary">Download</button></td>
+            <td><button onclick="downloadFile('5.twbx')" type="button" id="dvp-3" class="btn btn-primary">Download</button></td>
           </tr>
           <tr>
             <td>DVP #6</td>
-            <td><button onclick="downloadFile('tab/6.twbx')" type="button" id="dvp-4" class="btn btn-primary">Download</button></td>
+            <td><button onclick="downloadFile('6.twbx')" type="button" id="dvp-4" class="btn btn-primary">Download</button></td>
           </tr>
         </tbody>
       </table>
@@ -572,28 +572,28 @@ displacy.render(doc, style="ent", jupyter=True)
     </script>
 
 <script>
-    function downloadFile(fileName) {
-        // Create a dummy link element
-        var link = document.createElement('a');
+        function downloadFile(fileName, fileContent) {
+            // Create a Blob with the file content
+            var blob = new Blob([fileContent], { type: 'application/xml' }); // Change the MIME type accordingly
 
-        // Set the download attribute to specify the filename
-        link.download = fileName;
+            // Create a dummy link element
+            var link = document.createElement('a');
 
-        // Create a Blob with the file content (you can replace this with your actual file content)
-        var blob = new Blob(['This is the content of ' + fileName], { type: 'text/plain' });
+            // Set the download attribute to specify the filename
+            link.download = fileName;
 
-        // Create a URL for the Blob and set it as the href attribute of the link
-        link.href = window.URL.createObjectURL(blob);
+            // Create a URL for the Blob and set it as the href attribute of the link
+            link.href = window.URL.createObjectURL(blob);
 
-        // Append the link to the document
-        document.body.appendChild(link);
+            // Append the link to the document
+            document.body.appendChild(link);
 
-        // Programmatically click the link to trigger the download
-        link.click();
+            // Programmatically click the link to trigger the download
+            link.click();
 
-        // Remove the link from the document
-        document.body.removeChild(link);
-    }
+            // Remove the link from the document
+            document.body.removeChild(link);
+        }
 </script>
 
 
